@@ -28,11 +28,15 @@
 #### **Target 5 - less context switches:**
 > [number of switches = number of time slots (starting from 1), such that the occupation in the previous time slot doesn't match the occupation in this time slot]
 
-`Solutioin: When preempt haapying, check if the process can complete within next time slot then don't preempt it`
+`Solutioin 1: When preempt haapying, check if the process can complete within next time slot then don't preempt it`
+
+`Solutioin 2: Dynamic adjust the preempt solt time by no. of  process waiting`
 
 
 #### **Target 6 - members wait less than non-members:**
 > [wait time for a customer = time before 1st run + time in waiting list]
 
 `Solutioin: Use two queues for members and non-members (can keep use one stack, and pop members before non-members)`
+
+
 
