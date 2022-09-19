@@ -80,7 +80,7 @@ void print_state(
     int current_time,
     int current_id,
     const std::deque<Event> &arrival_events,
-    const std::deque<int> &customer_queue)
+    const std::vector<int> &customer_queue)
 {
     out_file << current_time << " " << current_id << '\n';
     if (PRINT_LOG == 0)
@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
 
     int current_id = -1; // who is using the machine now, -1 means nobody
     int time_out = -1; // time when current customer will be preempted
-    std::deque<int> queue; // waiting queue
+    std::vector<int> queue; // waiting queue
+    std::vector<int>::iterator it;
 
     // step by step simulation of each time slot
     bool all_done = false;
@@ -159,8 +160,35 @@ int main(int argc, char *argv[])
         {
             if (!queue.empty()) // is anyone waiting?
             {
-                current_id = queue.front();
-                queue.pop_front();
+                it = queue.begin();  
+                // let new come customer play first round
+                for (int i = 0; i < queue.size(); i++) {
+                    if (customers[queue[i]].playing_since < 0)
+                    {
+                        current_id = queue[i];
+                        queue.erase(it + i);
+                        break;
+                    }                    
+                }
+                // let high priority member play early 
+                if (current_id == -1)
+                {
+                    for (int i = 0; i < queue.size(); i++) {
+                        if (customers[queue[i]].priority == 0)
+                        {
+                            current_id = queue[i];
+                            queue.erase(it + i);
+                            break;
+                        }
+                    }                
+                }
+                // let remain first customer in queue play
+                if (current_id == -1)
+                {                    
+                    current_id = queue[0];                    
+                    queue.erase(it + 0);
+                }
+                
                 if (TIME_ALLOWANCE > customers[current_id].slots_remaining)
                 {
                     time_out = current_time + customers[current_id].slots_remaining;
