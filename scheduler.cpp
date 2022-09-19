@@ -164,10 +164,18 @@ int main(int argc, char *argv[])
                 if (TIME_ALLOWANCE > customers[current_id].slots_remaining)
                 {
                     time_out = current_time + customers[current_id].slots_remaining;
-                }
+                }                
                 else
                 {
-                    time_out = current_time + TIME_ALLOWANCE;
+                    // if current customer can finish in next round, don't preempt it 
+                    if (customers[current_id].slots_remaining <= 16)
+                    {
+                        time_out = current_time + customers[current_id].slots_remaining;
+                    } 
+                    else
+                    {                    
+                        time_out = current_time + TIME_ALLOWANCE;
+                    }
                 }
                 customers[current_id].playing_since = current_time;
             }
