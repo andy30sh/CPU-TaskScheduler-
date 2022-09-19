@@ -170,6 +170,18 @@ int main(int argc, char *argv[])
                         break;
                     }                    
                 }
+                // let shorter customer play early
+                if (current_id == -1)
+                {
+                    for (int i = 0; i < queue.size(); i++) {
+                        if (customers[queue[i]].slots_remaining < TIME_ALLOWANCE * 2)
+                        {
+                            current_id = queue[i];
+                            queue.erase(it + i);
+                            break;
+                        }
+                    }                
+                }                
                 // let high priority member play early 
                 if (current_id == -1)
                 {
