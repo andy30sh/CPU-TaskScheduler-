@@ -22,7 +22,7 @@
 > [longest response time = maximum response time across customers in the given input]
 > [response time for a customer = index of the time slot where the customers plays for the first time minus index of time slot where the customer arrived]
 
-`Solutioin: New arrvied processes have higher priority for 1st run`
+`Solutioin: New arrvied processes have higher priority for first run`
 
 
 #### **Target 5 - less context switches:**
@@ -30,7 +30,7 @@
 
 `Solutioin 1: When preempt haapying, check if the process can complete within next time slot then don't preempt it`
 
-`Solutioin 2: Dynamic adjust the preempt solt time by no. of  process waiting`
+`Solutioin 2: Dynamic adjust the preempt solt time by no. of process waiting`
 
 
 #### **Target 6 - members wait less than non-members:**
@@ -39,4 +39,9 @@
 `Solutioin: Use two queues for members and non-members (can keep use one stack, and pop members before non-members)`
 
 
+### Run and Test code:
+#### [Windows base]  
+<img src="https://github.com/andy30sh/OperatingSystem-7064/blob/main/picture/1.png" alt="Complie code" style="width:600px;"/>
+<img src="https://github.com/andy30sh/OperatingSystem-7064/blob/main/picture/2.png" alt="Complie code" style="width:600px;"/>
+<img src="https://github.com/andy30sh/OperatingSystem-7064/blob/main/picture/3.png" alt="Complie code" style="width:600px;"/>
 
