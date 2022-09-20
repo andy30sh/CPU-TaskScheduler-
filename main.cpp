@@ -95,7 +95,10 @@ void print_state(
 }
 
 bool cmp1(std::pair<int, int>a, std::pair<int, int> b) {
-    if (a.first <= b.first) {
+    if (a.first < b.first) {
+        return true;
+    }
+    else if (a.first == b.first && a.second < b.second) {
         return true;
     }
     else {
