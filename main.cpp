@@ -3,7 +3,7 @@
 #include <deque>
 #include <vector>
 #include<queue>
-
+#include<algorithm>
 // std is a namespace: https://www.cplusplus.com/doc/oldtutorial/namespaces/
 const int TIME_ALLOWANCE = 8;  // allow to use up to this number of time slots at once
 const int PRINT_LOG = 0; // print detailed execution trace
@@ -74,7 +74,7 @@ void print_state(
     int current_time,
     int current_id,
     const std::deque<Event>& arrival_events,
-    const std::deque<int>& customer_queue)
+    const std::deque<std::pair<int,int>>& customer_queue)
 {
     out_file << current_time << " " << current_id << '\n';
     if (PRINT_LOG == 0)
@@ -89,11 +89,19 @@ void print_state(
     std::cout << '\n';
     for (int i = 0; i < customer_queue.size(); i++)
     {
-        std::cout << "\t" << customer_queue[i] << ", ";
+        std::cout << "\t" << customer_queue[i].second << ", ";
     }
     std::cout << '\n';
 }
 
+bool cmp1(std::pair<int, int>a, std::pair<int, int> b) {
+    if (a.first <= b.first) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 // process command line arguments
 // https://www.geeksforgeeks.org/command-line-arguments-in-c-cpp/
 int main(int argc, char* argv[])
@@ -122,8 +130,8 @@ int main(int argc, char* argv[])
 
     int current_id = -1; // who is using the machine now, -1 means nobody
     int time_out = -1; // time when current customer will be preempted
-    std::deque<int> queue0;
-    std::deque<int> queue1;
+    std::deque<std::pair<int,int>> queue0;
+    std::deque<std::pair<int, int>> queue1;
     // step by step simulation of each time slot
     bool all_done = false;
     bool prio = true;
@@ -132,17 +140,20 @@ int main(int argc, char* argv[])
         // welcome newly arrived customers
         while ((!arrival_events0.empty() || !arrival_events1.empty()) && (current_time == arrival_events0[0].event_time || current_time == arrival_events1[0].event_time)) {
             if (current_time == arrival_events0[0].event_time && current_time == arrival_events1[0].event_time) {
-                queue0.push_back(arrival_events0[0].customer_id);
+                queue0.push_back(std::pair<int, int>{customers[arrival_events0[0].customer_id].slots_remaining,arrival_events0[0].customer_id});
+                sort(queue0.begin(), queue0.end(), cmp1);
                 //queue.push_back(arrival_events0.top().event_time);
                 arrival_events0.pop_front();
             }
             else if (current_time == arrival_events0[0].event_time && current_time != arrival_events1[0].event_time) {
-                queue0.push_back(arrival_events0[0].customer_id);
+                queue0.push_back(std::pair<int, int>{customers[arrival_events0[0].customer_id].slots_remaining, arrival_events0[0].customer_id});
+                sort(queue0.begin(), queue0.end(), cmp1);
                 //queue.push_back(arrival_events0.top().event_time);
                 arrival_events0.pop_front();
             }
             else if (current_time != arrival_events0[0].event_time && current_time == arrival_events1[0].event_time) {
-                queue1.push_back(arrival_events1[0].customer_id);
+                queue1.push_back(std::pair<int, int>{customers[arrival_events1[0].customer_id].slots_remaining, arrival_events1[0].customer_id});
+                sort(queue1.begin(), queue1.end(), cmp1);
                 //queue.push_back(arrival_events1.top().event_time);
                 arrival_events1.pop_front();
             }
@@ -150,12 +161,12 @@ int main(int argc, char* argv[])
         if (current_id == -1) {
             if (!queue0.empty()|| !queue1.empty()) {
                 if (!queue0.empty()) {
-                    current_id = queue0.front();
+                    current_id = queue0.front().second;
                     queue0.pop_front();
                     prio = true;
                 }
                 else {
-                    current_id = queue1.front();
+                    current_id = queue1.front().second;
                     queue1.pop_front();
                     prio = false;
                 }
@@ -178,11 +189,12 @@ int main(int argc, char* argv[])
                 customers[current_id].slots_remaining -= last_run;
                 if (customers[current_id].slots_remaining > 0) {
                     if (prio == true) {
-                        queue0.push_front(current_id);
-
+                        queue0.push_front(std::pair<int, int>{customers[current_id].slots_remaining,current_id});
+                        sort(queue0.begin(), queue0.end(), cmp1);
                     }
                     else {
-                        queue1.push_front(current_id);
+                        queue1.push_front(std::pair<int, int>{customers[current_id].slots_remaining, current_id});
+                        sort(queue1.begin(), queue1.end(), cmp1);
                     }
                     current_id = -1;
                 }
