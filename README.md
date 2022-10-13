@@ -2,12 +2,12 @@
 ## **Assignment 2 - CPU scheduler in C++**
 
 ### _**Our targets:**_
-1.  program produces a valid output scheduling within 5 minutes (0.3 marks)
-2.  scheduling is different from baseline (0.3 marks)
-3.  scheduling has a smaller total wait time as compared to the baseline (0.3 marks)
-4.  scheduling has a smaller longest response time as compared to the baseline
-5.  scheduling contains fewer switches between customers as compared to the baseline (0.6 marks)
-6.  Your scheduling has a smaller total wait time for high priority customers as compared to the total wait time for regular customers (0.6 marks)
+1.  Program produces a valid output scheduling within 5 minutes (0.3 marks)
+2.  Scheduling is different from baseline (0.3 marks)
+3.  Scheduling has a smaller total wait time as compared to the baseline (0.3 marks)
+4.  Scheduling has a smaller longest response time as compared to the baseline
+5.  Scheduling contains fewer switches between customers as compared to the baseline (0.6 marks)
+6.  Scheduling has a smaller total wait time for high priority customers as compared to the total wait time for regular customers (0.6 marks)
 
 ### _**Suggestion:**_
 
